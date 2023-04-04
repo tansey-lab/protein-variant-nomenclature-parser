@@ -1,0 +1,24 @@
+name: Publish package
+on:
+  push: { branches: main }
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    container:
+      image: jeffquinnmsk/protein-variant-nomenclature-parser:latest
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v2
+
+    - name: Generate source
+      run: make clean && make protein_variant_nomenclature_parser/generated
+
+    - name: Build
+      run: python -m build
+
+    - name: Publish package
+      run: twine upload dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        TWINE_NON_INTERACTIVE: 1

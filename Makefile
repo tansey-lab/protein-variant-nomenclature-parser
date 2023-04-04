@@ -9,3 +9,9 @@ antlr/HUGOLexer.g4:
 
 clean:
 	rm -rf $(GENERATED_FILES_DIR) antlr/HUGOLexer.g4
+
+test:
+	python -m unittest protein_variant_nomenclature_parser/test_parser.py
+
+install: protein_variant_nomenclature_parser/generated
+	pip install .
