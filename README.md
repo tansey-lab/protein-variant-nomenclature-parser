@@ -11,6 +11,21 @@ strings like `BRAF V600E` that commonly appear in manuscripts.
 - Extract the components of the nomenclature string, such as gene name, prefix amino acid, position or range, and suffix amino acid
 - Validate whether a given string conforms to the expected format
 
+## Usage
+
+```python
+from protein_variant_nomenclature_parser.parser import parse
+
+mutation_string = "BRAF V600E"
+parsed_components = parse(mutation_string)
+
+print(parsed_components)
+```
+
+```
+ProteinVariant(gene='BRAF', amino_acid_before='V', number_or_range=NumberOrRange(start=600, end=None), amino_acid_after='E')
+```
+
 ## Supported Nomenclature
 
 The parser supports all HUGO gene names.
