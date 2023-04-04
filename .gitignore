@@ -1,0 +1,6 @@
+.idea
+
+antlr/HUGOLexer.g4
+protein_variant_nomenclature_parser.egg-info
+protein_variant_nomenclature_parser/generated/*
+build/

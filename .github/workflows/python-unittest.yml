@@ -1,0 +1,21 @@
+name: Unit tests
+on:
+  pull_request: { }
+  push: { branches: main }
+
+jobs:
+  test:
+    name: Run python unittests in docker
+    runs-on: ubuntu-latest
+    container:
+      image: jeffquinnmsk/protein-variant-nomenclature-parser:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Uninstall package
+        run: pip uninstall --yes protein-variant-nomenclature-parser
+
+      - name: Run tests
+        run: make clean && make install && make test
