@@ -13,6 +13,8 @@ strings like `BRAF V600E` that commonly appear in manuscripts.
 
 ## Usage
 
+For parsing:
+
 ```python
 from protein_variant_nomenclature_parser.parser import parse
 
@@ -24,6 +26,21 @@ print(parsed_components)
 
 ```
 ProteinVariant(gene='BRAF', amino_acid_before='V', number_or_range=NumberOrRange(start=600, end=None), amino_acid_after='E')
+```
+
+For validation:
+
+```python
+from protein_variant_nomenclature_parser.parser import parse
+from protein_variant_nomenclature_parser.parser import InvalidProteinVariantError
+
+
+mutation_string = "INVALID V600E"
+
+try:
+    parse(mutation_string)
+except InvalidProteinVariantError:
+    print(f"{mutation_string} is not valid")
 ```
 
 ## Supported Nomenclature
