@@ -20,8 +20,8 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parse(input_string), expected_output)
 
     def test_range_mutation(self):
-        input_string = "BRAF V600_605E"
-        expected_output = ProteinVariant("BRAF", "V", NumberOrRange(600, 605), "E")
+        input_string = "BRAFVK600_601>E"
+        expected_output = ProteinVariant("BRAF", "VK", NumberOrRange(600, 601), "E")
 
         self.assertEqual(parse(input_string), expected_output)
 

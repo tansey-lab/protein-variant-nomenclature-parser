@@ -6,8 +6,8 @@ strings like `BRAF V600E` that commonly appear in manuscripts.
 ## Features
 
 - Parse protein variant nomenclature strings in the following formats:
-  - Single amino acid substitution: "BRAF V600E", "BRAFV600E", "PTEN R130G", "TP53 R175H"
-  - Range of amino acid substitutions: "BRAF V600_601E", "PTEN R130_131A", "TP53 R175_176N"
+  - Single amino acid substitution, e.g.: `BRAF V600E`, `BRAFV600E`, `PTEN R130G`, `TP53 R175H`
+  - Range of amino acid substitutions: `BRAFVK600_601>E`
 - Extract the components of the nomenclature string, such as gene name, prefix amino acid, position or range, and suffix amino acid
 - Validate whether a given string conforms to the expected format
 
