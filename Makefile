@@ -15,3 +15,6 @@ test:
 
 install: protein_variant_nomenclature_parser/generated
 	pip install .
+
+container:
+	docker build --platform linux/amd64 .
