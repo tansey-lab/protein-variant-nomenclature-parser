@@ -12,7 +12,7 @@ amino_acid_or_stop: AMINO_ACID | STOP_CODON;
 
 number: INT;
 
-WS: [ \t]+ -> skip;
+WS: [> \t]+ -> skip;
 
 INT: [0-9]+;
 
