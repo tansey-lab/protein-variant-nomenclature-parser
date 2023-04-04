@@ -7,18 +7,15 @@ jobs:
   test:
     name: Run python unittests
     runs-on: ubuntu-latest
+    container:
+      image: jeffquinnmsk/protein-variant-nomenclature-parser:latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
       - name: Install package
-        run: pip install .
+        run: pip uninstall protein-variant-nomenclature-parser
 
       - name: Run tests
-        run: make python-unittest
+        run: make install && make test

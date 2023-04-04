@@ -8,7 +8,7 @@ jobs:
       image: jeffquinnmsk/protein-variant-nomenclature-parser:latest
     steps:
     - name: Check out source code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Generate source
       run: make clean && make protein_variant_nomenclature_parser/generated
