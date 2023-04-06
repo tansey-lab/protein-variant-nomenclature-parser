@@ -1,6 +1,5 @@
 import unittest
 from protein_variant_nomenclature_parser.parser import (
-    parse_ProteinVariant_string,
     InvalidProteinVariantError,
     parse,
     ProteinVariant,
@@ -9,13 +8,29 @@ from protein_variant_nomenclature_parser.parser import (
 
 
 class TestParser(unittest.TestCase):
-    def test_simple_mutation(self):
+    def test_simple_mutation_with_space(self):
         input_string = "ZSWIM9 V600E"
         expected_output = ProteinVariant("ZSWIM9", "V", NumberOrRange(600), "E")
         self.assertEqual(parse(input_string), expected_output)
 
     def test_simple_mutation_no_space(self):
         input_string = "BRAFV600E"
+        expected_output = ProteinVariant("BRAF", "V", NumberOrRange(600), "E")
+        self.assertEqual(parse(input_string), expected_output)
+
+    def test_ambiguous_hugo_prefix(self):
+        # This is an ambiguous one if there's not any whitespace, we should
+        # handle this in the future
+        input_string = "CGA SS600E"
+        expected_output = ProteinVariant("CGA", "SS", NumberOrRange(600), "E")
+        self.assertEqual(parse(input_string), expected_output)
+
+        input_string = "CGASS600E"
+        expected_output = ProteinVariant("CGAS", "S", NumberOrRange(600), "E")
+        self.assertEqual(parse(input_string), expected_output)
+
+    def test_simple_mutation_superscript(self):
+        input_string = "BRAFᵛ⁶⁰⁰ᵉ"
         expected_output = ProteinVariant("BRAF", "V", NumberOrRange(600), "E")
         self.assertEqual(parse(input_string), expected_output)
 

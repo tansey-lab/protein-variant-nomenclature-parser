@@ -1,6 +1,5 @@
 .idea
 
-antlr/*.g4
 protein_variant_nomenclature_parser.egg-info
-protein_variant_nomenclature_parser/generated/*
+protein_variant_nomenclature_parser/hugo.py
 build/
