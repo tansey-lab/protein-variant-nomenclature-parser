@@ -1,16 +1,8 @@
-from antlr4 import *
+import re
 from dataclasses import dataclass
 from typing import Optional
-
-from protein_variant_nomenclature_parser.generated.ProteinVariantLexer import (
-    ProteinVariantLexer,
-)
-from protein_variant_nomenclature_parser.generated.ProteinVariantParser import (
-    ProteinVariantParser,
-)
-from protein_variant_nomenclature_parser.generated.ProteinVariantListener import (
-    ProteinVariantListener,
-)
+import unicodedata
+from protein_variant_nomenclature_parser import hugo
 
 
 @dataclass
@@ -22,50 +14,52 @@ class NumberOrRange:
 @dataclass
 class ProteinVariant:
     gene: Optional[str]
-    amino_acid_before: str
-    number_or_range: NumberOrRange
-    amino_acid_after: str
+    ref: str
+    position: NumberOrRange
+    alt: str
+
+
+def find_longest_prefix(s, prefixes=hugo.HUGO_GENE_NAMES):
+    longest_prefix = ""
+    for prefix in prefixes:
+        if s.startswith(prefix) and len(prefix) > len(longest_prefix):
+            longest_prefix = prefix
+    return longest_prefix if longest_prefix else None
 
 
 class InvalidProteinVariantError(Exception):
     pass
 
 
-class ProteinVariantExtractListener(ProteinVariantListener):
-    def __init__(self):
-        self.result = []
-
-    def exitGene(self, ctx):
-        self.result.append(ctx.getText())
-
-    def exitAmino_acid_or_stop(self, ctx):
-        self.result.append(ctx.getText())
-
-    def exitNumber_or_range(self, ctx):
-        numbers = [int(number.getText()) for number in ctx.number()]
-
-        self.result.append(numbers)
-
-
-def parse_ProteinVariant_string(input_string):
-    input_stream = InputStream(input_string)
-    lexer = ProteinVariantLexer(input_stream)
-    lexer.removeErrorListeners()
-    token_stream = CommonTokenStream(lexer)
-    parser = ProteinVariantParser(token_stream)
-    parser.removeErrorListeners()
-    tree = parser.mutation()
-
-    if parser.getNumberOfSyntaxErrors() > 0:  # Check if there were any syntax errors
-        raise InvalidProteinVariantError("Invalid ProteinVariant string")
-
-    listener = ProteinVariantExtractListener()
-    walker = ParseTreeWalker()
-    walker.walk(listener, tree)
-
-    return listener.result
+POSITION_AND_AA_REGEX = re.compile(
+    "^([ARNDCQEGHILKMFPSTWYVUO*]+)([ \t])?(\d+)([-_]\d+)?([ \t>])?([ARNDCQEGHILKMFPSTWYVUO*]+)$"
+)
 
 
 def parse(input_string):
-    gene, ref, pos, alt = parse_ProteinVariant_string(input_string)
-    return ProteinVariant(gene, ref, NumberOrRange(*pos), alt)
+    input_string = input_string.strip()
+
+    input_string = unicodedata.normalize("NFKC", input_string).upper()
+    hugo_gene_name = find_longest_prefix(input_string.strip())
+
+    if hugo_gene_name is None:
+        raise InvalidProteinVariantError("No hugo gene name found")
+
+    prefix_stripped_input = input_string[len(hugo_gene_name) :].strip()
+
+    match = POSITION_AND_AA_REGEX.match(prefix_stripped_input)
+
+    if not match:
+        raise InvalidProteinVariantError("Invalid position/AA info")
+
+    amino_acids_before = match.group(1)
+    start = int(match.group(3))
+    end = int(match.group(4)[1:]) if match.group(4) else None
+    amino_acids_after = match.group(6)
+
+    return ProteinVariant(
+        hugo_gene_name,
+        amino_acids_before,
+        NumberOrRange(start=start, end=end),
+        amino_acids_after,
+    )
