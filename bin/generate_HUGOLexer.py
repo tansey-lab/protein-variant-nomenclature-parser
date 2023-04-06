@@ -1,7 +1,7 @@
-import json
 import requests
 import sys
 import os
+from pathlib import Path
 
 
 def get_latest_hugo_symbol_list():
@@ -38,6 +38,9 @@ STOP_CODON: '*';
 
 
 def generate_lexer(output_dir, gene_names, chunk_size: int = 100):
+    path = Path(output_dir)
+    path.mkdir(parents=True, exist_ok=True)
+
     num_chunks = (len(gene_names) + chunk_size - 1) // chunk_size
     gene_name_chunks = [
         gene_names[i * chunk_size : (i + 1) * chunk_size] for i in range(num_chunks)
