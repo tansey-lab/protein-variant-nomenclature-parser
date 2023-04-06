@@ -10,8 +10,8 @@ from protein_variant_nomenclature_parser.parser import (
 
 class TestParser(unittest.TestCase):
     def test_simple_mutation(self):
-        input_string = "BRAF V600E"
-        expected_output = ProteinVariant("BRAF", "V", NumberOrRange(600), "E")
+        input_string = "ZSWIM9 V600E"
+        expected_output = ProteinVariant("ZSWIM9", "V", NumberOrRange(600), "E")
         self.assertEqual(parse(input_string), expected_output)
 
     def test_simple_mutation_no_space(self):
