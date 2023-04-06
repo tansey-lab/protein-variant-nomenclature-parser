@@ -6,7 +6,7 @@ strings like `BRAF V600E` that commonly appear in manuscripts.
 ## Features
 
 - Parse protein variant nomenclature strings in the following formats:
-  - Single amino acid substitution, e.g.: `BRAF V600E`, `BRAFV600E`, `PTEN R130G`, `TP53 R175H`
+  - Single amino acid substitution, e.g.: `BRAF V600E`, `BRAFV600E`, `BRAFᵛ⁶⁰⁰ᵉ`
   - Range of amino acid substitutions: `BRAFVK600_601>E`
 - Extract the components of the nomenclature string, such as gene name, prefix amino acid, position or range, and suffix amino acid
 - Validate whether a given string conforms to the expected format
@@ -48,6 +48,9 @@ except InvalidProteinVariantError:
 The parser supports all HUGO gene names.
 
 The parser supports the following amino acid single letter codes and stop codon (*).
+
+The parser supports situations where the variant has no space between the gene name in the substitution,
+which unfortunately comes up sometimes.
 
 ## Installation
 
