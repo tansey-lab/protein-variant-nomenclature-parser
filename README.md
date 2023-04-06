@@ -10,6 +10,7 @@ strings like `BRAF V600E` that commonly appear in manuscripts.
   - Range of amino acid substitutions: `BRAFVK600_601>E`
 - Extract the components of the nomenclature string, such as gene name, prefix amino acid, position or range, and suffix amino acid
 - Validate whether a given string conforms to the expected format
+- Pure python with zero dependencies and no dependency on an internet connection
 
 ## Usage
 
@@ -25,7 +26,7 @@ print(parsed_components)
 ```
 
 ```
-ProteinVariant(gene='BRAF', amino_acid_before='V', number_or_range=NumberOrRange(start=600, end=None), amino_acid_after='E')
+ProteinVariant(gene='BRAF', ref='V', position=NumberOrRange(start=600, end=None), alt='E')
 ```
 
 For validation:
